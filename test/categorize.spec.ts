@@ -21,7 +21,7 @@ describe('Categorize', () => {
     expect(await Unsure("Mouse").categorize(["large", "small"])).toBe("small");
     expect(await Unsure("Whale").categorize(["large", "small"])).toBe("large");
     expect(await Unsure("Ant").categorize(["large", "small"])).toBe("small");
-    wait(30000);
+    await wait(30000);
     // Testing categorization based on color
     expect(await Unsure("Sky").categorize(["blue", "green"])).toBe("blue");
     expect(await Unsure("Grass").categorize(["blue", "green"])).toBe("green");
@@ -32,7 +32,7 @@ describe('Categorize', () => {
     expect(await Unsure("Pretzel").categorize(["sweet", "salty"])).toBe("salty");
     expect(await Unsure("Candy").categorize(["sweet", "salty"])).toBe("sweet");
     expect(await Unsure("Chips").categorize(["sweet", "salty"])).toBe("salty");
-    wait(30000);
+    await wait(30000);
     // Testing categorization based on temperature
     expect(await Unsure("Ice").categorize(["hot", "cold"])).toBe("cold");
     expect(await Unsure("Coffee").categorize(["hot", "cold"])).toBe("hot");

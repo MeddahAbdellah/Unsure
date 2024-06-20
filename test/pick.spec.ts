@@ -24,7 +24,7 @@ describe('Pick', () => {
     expect(await Unsure("User Email: john.doe@example.com").pick("email")).toBe("john.doe@example.com");
     expect(await Unsure("Email: john.doe@example.com").pick("email")).toBe("john.doe@example.com");
     expect(await Unsure("Contact at john.doe@example.com").pick("email")).toBe("john.doe@example.com");
-    wait(30000);
+    await wait(30000);
     // Various formats for phone number
     expect(await Unsure("Contact Number: +1-800-555-5555").pick("phone number")).toBe("+1-800-555-5555");
     expect(await Unsure("Phone: +1-800-555-5555").pick("phone number")).toBe("+1-800-555-5555");
@@ -39,7 +39,7 @@ describe('Pick', () => {
     expect(await Unsure("Status: true (active)").pick("status")).toBe("true");
     expect(await Unsure("Active Status: true").pick("status")).toBe("true");
     expect(await Unsure("Account Status: Active").pick("status")).toBe("active");
-    wait(30000);
+    await wait(30000);
     // Various formats for number of items
     expect(await Unsure("Total Items: 15").pick("number of items")).toBe("15");
     expect(await Unsure("Items: 15").pick("number of items")).toBe("15");
@@ -54,7 +54,7 @@ describe('Pick', () => {
     expect(await Unsure("Success: true").pick("success")).toBe("true");
     expect(await Unsure("Operation was successful: true").pick("success")).toBe("true");
     expect(await Unsure("Success status: true").pick("success")).toBe("true");
-    wait(30000);
+    await wait(30000);
 
     // Various formats for error code
     expect(await Unsure("Error Code: 404 - Not Found").pick("status code (the number)")).toBe("404");

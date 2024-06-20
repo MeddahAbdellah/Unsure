@@ -20,7 +20,7 @@ describe('FlatMapTo', () => {
     expect(await Unsure("Response: {\"key\": \"should get this\"}").flatMapTo("key's value")).toEqual("should get this");
     expect(await Unsure("HTML Content: <html><body><div class=\"scrapable\">Target Content<div></body></html>").flatMapTo("contain of the div with the class scrapable")).toBe("Target Content");
     expect(await Unsure("Favorite Color: #FF5733").flatMapTo("color in hex")).toBe("#FF5733");
-    wait(30000);
+    await wait(30000);
     expect(await Unsure("Order Total: 12345 USD").flatMapTo("price")).toBe("12345");
     expect(await Unsure("Temperature Reading: 98.6°F (normal)").flatMapTo("temperature")).toBe("98.6");
     expect(await Unsure("Success: operation completed successfully").flatMapTo("boolean")).toBe("true");

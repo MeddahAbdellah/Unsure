@@ -52,6 +52,7 @@ let Unsure: UnsureFn<string | number, string[]>;
 type options = {
   inferenceEndpoint?: (q: string) => Promise<string>;
   groqApiKey?: string;
+  preventLowerCase?: boolean;
 };
 function configGlobalUnsure(options: options): void {
   Unsure = createUnsure(options);
@@ -96,21 +97,24 @@ function createUnsure(options: options) {
       )).toLowerCase());
     },
     flatMapTo: async (op2: string) => {
-      return (await inferenceEndpoint(
+      const response = await inferenceEndpoint(
         `Transform "${op1}" to "${op2}". Answer with only one value, no extra text, if you give extra text, the answer is useless.`
-      )).toLowerCase();
+      );
+      return options.preventLowerCase ? response : response.toLowerCase();
     },
     categorize: async (op2: C) => {
-      return (await inferenceEndpoint(
+      const response = await inferenceEndpoint(
         `From these categories "${op2.join(
           ', '
         )}". In which category "${op1}" fits. Answer with only one value, no extra text, if you give extra text, the answer is useless.`
-      )).toLowerCase();
+      );
+      return options.preventLowerCase ? response : response.toLowerCase();
     },
     pick: async (op2: string) => {
-      return (await inferenceEndpoint(
+      const response = await inferenceEndpoint(
         `From this text "${op2}". Pick the value of "${op1}". Answer with only one value, no extra text, if you give extra text, the answer is useless.`
-      )).toLowerCase();
+      );
+      return options.preventLowerCase ? response : response.toLowerCase();
     },
     value: op1.toString(),
   });;
