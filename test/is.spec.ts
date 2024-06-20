@@ -5,7 +5,7 @@ const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 describe('Is', () => {
   beforeAll(() => {
-    const groqApiKey = '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';
+    const groqApiKey = process.env['GROQ_API_KEY'] as string;;
     configGlobalUnsure({ groqApiKey });
   });
   test('should yield true', async () => {
