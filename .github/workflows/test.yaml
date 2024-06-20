@@ -22,4 +22,4 @@ jobs:
       - name: Run Jest Tests
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-        run: npm run jest
+        run: npm run test
