@@ -1,5 +1,5 @@
 {
-  "name": "unsure-utils",
+  "name": "unsure-js",
   "version": "1.0.0",
   "description": "A utility package that leverages the capabilities of llms to allow working with values with undertermined format",
   "main": "./dist/index.js",
