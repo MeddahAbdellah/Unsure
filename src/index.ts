@@ -1,11 +1,12 @@
-function defaultInferenceEndpoint(
-  groqApiKey?: string
+function defaultGroqInferenceEndpoint(
+  groqApiKey?: string,
+  model: string = 'llama3-70b-8192'
 ): (q: string) => Promise<string> {
   return async (q: string) => {
     const apiKey = groqApiKey;
     const apiUrl = 'https://api.groq.com/openai/v1/chat/completions';
     const requestBody = {
-      model: 'llama3-70b-8192',
+      model,
       messages: [
         {
           role: 'assistant',
@@ -13,6 +14,45 @@ function defaultInferenceEndpoint(
         },
         {
           role: 'assistant',
+          content: q,
+        },
+      ],
+      temperature: 0.1,
+    };
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = (await response.json()).choices[0].message.content;
+    return data;
+  };
+}
+
+function defaultOpenAiChatGpt4Endpoint(
+  openAiApiKey?: string,
+  model: string = 'gpt-3.5-turbo'
+): (q: string) => Promise<string> {
+  return async (q: string) => {
+    const apiKey = openAiApiKey;
+    const apiUrl = 'https://api.openai.com/v1/chat/completions';
+    const requestBody = {
+      model,
+      messages: [
+        {
+          role: 'system',
+          content: 'Your answers must be concise.',
+        },
+        {
+          role: 'user',
           content: q,
         },
       ],
@@ -53,6 +93,8 @@ let Unsure: UnsureFn<string | number, string[]>;
 type options = {
   inferenceEndpoint?: (q: string) => Promise<string>;
   groqApiKey?: string;
+  openAiApiKey?: string;
+  model?: string;
   preventLowerCase?: boolean;
 };
 function configGlobalUnsure(options: options): void {
@@ -64,8 +106,11 @@ function createUnsure(options: options) {
   if (options?.inferenceEndpoint) {
     inferenceEndpoint = options.inferenceEndpoint;
   } else if (options?.groqApiKey) {
-    inferenceEndpoint = defaultInferenceEndpoint(options.groqApiKey);
-  } else {
+    inferenceEndpoint = defaultGroqInferenceEndpoint(options.groqApiKey, options.model);
+  } else if (options?.openAiApiKey) {
+    inferenceEndpoint = defaultOpenAiChatGpt4Endpoint(options.openAiApiKey, options.model);
+  }
+  else {
     throw new Error('An inference endpoint must be configured');
   }
   return <T extends string | number, C extends string[]>(op1: T, mapToOp2List?: string[]) => ({
