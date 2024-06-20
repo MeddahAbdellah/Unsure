@@ -40,13 +40,14 @@ type Unsure<T, C extends string[]> = {
   is: (op2: string) => Promise<boolean>;
   explainIs: (op2: string) => Promise<string>;
   flatMapTo: (op2: string) => Promise<string>;
-  mapTo: (op2: string) => Promise<Unsure<T, C>>;
+  mapTo: (op2: string) => Unsure<T, C>;
+  flat: () => Promise<string>;
   categorize: (op2: C) => Promise<C[number]>;
   pick: (op2: string) => Promise<string>;
   value: string;
 };
 
-type UnsureFn<T, C extends string[]> = (op1: T) => Unsure<T, C>;
+type UnsureFn<T, C extends string[]> = (op1: T, mapToOp2List?: string[]) => Unsure<T, C>;
 let Unsure: UnsureFn<string | number, string[]>;
 
 type options = {
@@ -67,7 +68,7 @@ function createUnsure(options: options) {
   } else {
     throw new Error('An inference endpoint must be configured');
   }
-  return <T extends string | number, C extends string[]>(op1: T) => ({
+  return <T extends string | number, C extends string[]>(op1: T, mapToOp2List?: string[]) => ({
     is: async (op2: string) => {
       return (
         await inferenceEndpoint(
@@ -91,10 +92,22 @@ function createUnsure(options: options) {
         `Is "${op1}" a/an/equal to "${op2}" and why ?`
       );
     },
-    mapTo: async (op2: string) => {
-      return Unsure((await inferenceEndpoint(
-        `Transform "${op1}" to "${op2}". Answer with only one value, no extra text, if you give extra text, the answer is useless.`
-      )).toLowerCase());
+    mapTo: (op2: string) => {
+      if (!mapToOp2List) {
+        return Unsure(op1.toString(), [op2]);
+      }
+      mapToOp2List.push(op2);
+      return Unsure(op1.toString(), mapToOp2List);
+    },
+    flat: async () => {
+      let result = op1.toString();
+      if (!mapToOp2List) {
+        return result;
+      }
+      for (const op2 of mapToOp2List) {
+        result = await inferenceEndpoint(`Transform "${result}" to "${op2}". Answer with only one value, no extra text, if you give extra text, the answer is useless.`);
+      }
+      return options.preventLowerCase ? result : result.toLowerCase();
     },
     flatMapTo: async (op2: string) => {
       const response = await inferenceEndpoint(
