@@ -13,7 +13,7 @@ function defaultGroqInferenceEndpoint(
           content: 'Your answers must be consise',
         },
         {
-          role: 'assistant',
+          role: 'user',
           content: q,
         },
       ],
