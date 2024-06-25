@@ -1,54 +1,17 @@
-function defaultGroqInferenceEndpoint(
-  groqApiKey?: string,
-  model: string = 'llama3-70b-8192'
+type SystemPromptRole = 'assistant' | 'system';
+
+function defaultInferenceEndpoint(
+  apiKey?: string,
+  model: string = 'llama3-70b-8192',
+  apiUrl : string = 'https://api.groq.com/openai/v1/chat/completions',
+  systemPromptRole: SystemPromptRole = 'assistant'
 ): (q: string) => Promise<string> {
   return async (q: string) => {
-    const apiKey = groqApiKey;
-    const apiUrl = 'https://api.groq.com/openai/v1/chat/completions';
     const requestBody = {
       model,
       messages: [
         {
-          role: 'assistant',
-          content: 'Your answers must be consise',
-        },
-        {
-          role: 'user',
-          content: q,
-        },
-      ],
-      temperature: 0.1,
-    };
-    const response = await fetch(apiUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify(requestBody),
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = (await response.json()).choices[0].message.content;
-    return data;
-  };
-}
-
-function defaultOpenAiChatGpt4Endpoint(
-  openAiApiKey?: string,
-  model: string = 'gpt-3.5-turbo'
-): (q: string) => Promise<string> {
-  return async (q: string) => {
-    const apiKey = openAiApiKey;
-    const apiUrl = 'https://api.openai.com/v1/chat/completions';
-    const requestBody = {
-      model,
-      messages: [
-        {
-          role: 'system',
+          role: systemPromptRole,
           content: 'Your answers must be concise.',
         },
         {
@@ -75,6 +38,10 @@ function defaultOpenAiChatGpt4Endpoint(
     return data;
   };
 }
+
+const defaultGroqInferenceEndpoint = (groqApiKey:string,model:string='llama3-70b-8192') => defaultInferenceEndpoint(groqApiKey, model, 'https://api.groq.com/openai/v1/chat/completions','assistant');
+
+const defaultOpenAiChatGpt4Endpoint = (openAiApiKey:string,model:string='gpt-3.5-turbo') => defaultInferenceEndpoint(openAiApiKey, model, 'https://api.openai.com/v1/chat/completions','system');
 
 type Unsure<T, C extends string[]> = {
   is: (op2: string) => Promise<boolean>;
