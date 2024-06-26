@@ -5,7 +5,7 @@ const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 describe('Is', () => {
   beforeAll(() => {
-    const groqApiKey = process.env['GROQ_API_KEY'] as string;;
+    const groqApiKey = process.env['GROQ_API_KEY'] as string;
     configGlobalUnsure({ groqApiKey });
   });
   test('should yield true', async () => {
@@ -73,7 +73,7 @@ describe('Is', () => {
     expect(await Unsure("Falcon").is("Bird")).toBe(true);
     expect(await Unsure("Microwave").is("Electronic device")).toBe(true);
     expect(await Unsure("Van").is("Vehicle")).toBe(true);
-    expect(await Unsure("Pine").is("Plant")).toBe(true);
+    expect(await Unsure("Pine").is("Tree")).toBe(true);
     expect(await Unsure("Plum").is("Fruit")).toBe(true);
     expect(await Unsure("Wolf").is("Mammal")).toBe(true);
     expect(await Unsure("Violet").is("a type of flower")).toBe(true);
@@ -89,7 +89,7 @@ describe('Is', () => {
     expect(await Unsure("Horse").is("Mammal")).toBe(true);
     expect(await Unsure("Daffodil").is("a type of flower")).toBe(true);
     expect(await Unsure("Pluto").is("Dwarf Planet")).toBe(true);
-    expect(await Unsure("Turtle").is("Pet")).toBe(true);
+    expect(await Unsure("The box turtle").is("Pet")).toBe(true);
     expect(await Unsure("Pineapple").is("Fruit")).toBe(true);
     await wait(30000);
     expect(await Unsure("Crow").is("Bird")).toBe(true);

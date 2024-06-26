@@ -5,7 +5,7 @@ jest.setTimeout(6000 * 1000);
 
 describe('FlatMapTo', () => {
   beforeAll(() => {
-    const groqApiKey = process.env['GROQ_API_KEY'] as string;;
+    const groqApiKey = process.env['GROQ_API_KEY'] as string;
     configGlobalUnsure({ groqApiKey });
   });
 

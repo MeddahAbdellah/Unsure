@@ -5,7 +5,7 @@ const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 describe('Pick', () => {
   beforeAll(() => {
-    const groqApiKey = process.env['GROQ_API_KEY'] as string;;
+    const groqApiKey = process.env['GROQ_API_KEY'] as string;
     configGlobalUnsure({ groqApiKey });
   });
 

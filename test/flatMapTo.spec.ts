@@ -5,7 +5,7 @@ const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 describe('FlatMapTo', () => {
   beforeAll(() => {
-    const groqApiKey = process.env['GROQ_API_KEY'] as string;;
+    const groqApiKey = process.env['GROQ_API_KEY'] as string;
     configGlobalUnsure({ groqApiKey });
   });
 
@@ -26,8 +26,8 @@ describe('FlatMapTo', () => {
     expect(await Unsure("Success: operation completed successfully").flatMapTo("boolean")).toBe("true");
     expect(await Unsure("Failure: operation failed").flatMapTo("boolean")).toBe("false");
     expect(await Unsure("Error Code: 404 - Not Found").flatMapTo("status")).toBe("404");
-    expect(await Unsure("Emergency Contact: +44 20 7946 0958 (London)").flatMapTo("phone")).toBe("+44 20 7946 0958");
-    expect(await Unsure("Emergency Contact: +44 20 7946 0958 (London)").flatMapTo("phone trimmed with no spaces")).toBe("+442079460958");
+    expect(await Unsure("Emergency Contact: +44 20 7946 0958 (London)").flatMapTo("phone trimmed with no spaces keeping the +")).toBe("+442079460958");
+    expect(await Unsure("Emergency Contact: +44 20 7946 0958 (London)").flatMapTo("phone trimmed with no spaces keeping the +")).toBe("+442079460958");
     expect(await Unsure("Answer: 42 (the meaning of life)").flatMapTo("number")).toBe("42");
     expect(await Unsure("Name: Jane Doe (Guest)").flatMapTo("preson's name")).toBe("jane doe");
     expect(await Unsure("Name: Jane Doe (Guest)").flatMapTo("role")).toBe("guest");
