@@ -84,7 +84,7 @@ function createUnsure(options: options) {
     is: async (op2: string) => {
       return (
         await inferenceEndpoint(
-          `Only answer with True or False. Is ${op1} a/an/equal to ${op2}`
+          `Only answer with True or False. ${op1} is a/an ${op2}`
         )
       )
         .toLowerCase()
