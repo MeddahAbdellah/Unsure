@@ -157,5 +157,9 @@ console.log(await Unsure("Amount: 200.23 $").mapTo("number").mapTo("integer").fl
 console.log(await myUnsure("Some value").flat()); // Uses OpenAi Apis;
 ```
 
+## Other languages implementation
+[Python](https://github.com/MeddahAbdellah/unsurepy) - by @meddahabdellah
+[Rust](https://github.com/HughBlackledge/unsure-rust) - by @HughBlackledge
+
 ## License
 This project is under the ISC license. Requests and contributions are most welcomed.
