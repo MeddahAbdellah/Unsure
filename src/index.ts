@@ -19,7 +19,7 @@ function defaultInferenceEndpoint(
           content: q,
         },
       ],
-      temperature: 0.1,
+      temperature: 0,
     };
     const response = await fetch(apiUrl, {
       method: 'POST',
